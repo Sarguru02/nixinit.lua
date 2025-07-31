@@ -4,9 +4,14 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    colorscripts = {
+      url = "github:Sarguru02/pokemon-colorscripts-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
+  outputs = inputs@{ self, nixpkgs, flake-parts, colorscripts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -32,6 +37,10 @@
             tinymist
             rust-analyzer
 
+            #colorscripts
+            coreutils
+            colorscripts.packages.${system}.default
+
             # Conform
             stylua
             markdown-oxide
@@ -45,6 +54,9 @@
             deadnix
             nix
             lua54Packages.luacheck
+
+            #blink
+            cargo
           ];
 
           nvim = pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped (

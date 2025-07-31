@@ -299,7 +299,7 @@ local dashboard = {
 		{ section = "keys", gap = 1, padding = 1 },
 		{
 			section = "terminal",
-			cmd = "colorscripts -r --no-title; sleep .1",
+			cmd = "pokemon-colorscripts -r --no-title; sleep .1",
 			random = 10,
 			pane = 2,
 			indent = 7,

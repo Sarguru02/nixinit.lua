@@ -1,5 +1,28 @@
 {
   "nodes": {
+    "colorscripts": {
+      "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1753948564,
+        "narHash": "sha256-Y++Fl7A9kAbKUcUM1qL81bmNTIng13NYv7GHNVL+m8w=",
+        "owner": "Sarguru02",
+        "repo": "pokemon-colorscripts-nix",
+        "rev": "5f78cbe678d1bd1dc8782429640db2ba558ea6ca",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Sarguru02",
+        "repo": "pokemon-colorscripts-nix",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -51,6 +74,7 @@
     },
     "root": {
       "inputs": {
+        "colorscripts": "colorscripts",
         "flake-parts": "flake-parts",
         "nixpkgs": "nixpkgs"
       }
