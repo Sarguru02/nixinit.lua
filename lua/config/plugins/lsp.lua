@@ -234,7 +234,7 @@ local config = function(_, opts)
 		pcall(keymap.del, { "x" }, "gra")
 
 		keymap.set("n", "gd", function()
-			snacks.picker.lsp_definitions()
+			Snacks.picker.lsp_definitions()
 		end, { desc = "go to definitions", buffer = buffer })
 
 		keymap.set("n", "gD", function()
