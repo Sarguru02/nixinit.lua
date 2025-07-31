@@ -10,11 +10,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1753948564,
-        "narHash": "sha256-Y++Fl7A9kAbKUcUM1qL81bmNTIng13NYv7GHNVL+m8w=",
+        "lastModified": 1753956934,
+        "narHash": "sha256-JE3GQJzcJg1/il6eYDoHGkIThhWNmCv0NqFCTz80WVI=",
         "owner": "Sarguru02",
         "repo": "pokemon-colorscripts-nix",
-        "rev": "5f78cbe678d1bd1dc8782429640db2ba558ea6ca",
+        "rev": "f4b6cd732c98955db64dfc47c264fe8f2a0c4187",
         "type": "github"
       },
       "original": {
