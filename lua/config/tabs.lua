@@ -7,7 +7,7 @@ local opts = { noremap = true, silent = true }
 keymap('n', '<leader>tn', ':tabnew<CR>', opts)
 
 -- Close current tab
-keymap('n', '<leader>xt', ':tabclose<CR>', opts)
+keymap('n', '<leader>xx', ':tabclose<CR>', opts)
 
 -- Cycle through tabs
 keymap('n', '<leader><TAB>', ':tabnext<CR>', opts)

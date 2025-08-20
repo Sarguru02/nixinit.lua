@@ -6,15 +6,11 @@ local fn = vim.fn
 local keymap = vim.keymap
 local lsp = vim.lsp
 local uv = vim.uv
-local v = vim.v
 
 -- plugin dependencies
 local dependencies = {
 	{
 		"saghen/blink.cmp",
-	},
-	{
-		"mason-org/mason.nvim",
 	},
 }
 
@@ -102,6 +98,20 @@ local opts = {
 				end
 			end,
 		},
+		nixd = {},
+		hls = {
+			filetypes = { "haskell", "lhaskell" },
+			root_dir = function(fname)
+				return require("lspconfig.util").root_pattern(
+					"*.cabal",
+					"stack.yaml",
+					"cabal.project",
+					"package.yaml",
+					"hie.yaml",
+					".git"
+				)(fname)
+			end,
+		},
 	},
 }
 
@@ -113,7 +123,6 @@ local config = function(_, opts)
 	local client_configs = {}
 
 	local blink_cmp = require("blink.cmp")
-	local mreg = require("mason-registry")
 
 	local original_buf_attach_client = lsp.buf_attach_client
 
@@ -279,7 +288,7 @@ local config = function(_, opts)
 		end, { desc = "lsp signature help", buffer = buffer })
 
 		keymap.set("n", "<leader>e", function()
-      diagnostic.open_float()
+			diagnostic.open_float()
 		end, { desc = "lsp signature help", buffer = buffer })
 	end
 
@@ -299,43 +308,32 @@ local config = function(_, opts)
 
 	local handler = function()
 		local enabled_servers = {}
+		local available_servers = {
+			"lua_ls",
+			"clangd", 
+			"gopls",
+			"rust_analyzer",
+			"vtsls",
+			"denols",
+			"pylsp",
+			"nixd",
+			"hls",
+			"tinymist",
+			"markdown_oxide"
+		}
 
-		local enable_server = function(pkg)
-			local pkg_obj
-
-			if type(pkg) == "string" then
-				local ok, result = pcall(function()
-					return mreg.get_package(pkg)
-				end)
-
-				if not ok then
-					Snacks.notify.error("Package " .. pkg .. " not found !!!")
-					return
-				end
-
-				pkg_obj = result
-			else
-				pkg_obj = pkg
-			end
-
-			local lsp_server = vim.tbl_get(pkg_obj, "spec", "neovim", "lspconfig")
-
-			if not lsp_server or enabled_servers[lsp_server] then
+		local enable_server = function(server_name)
+			if enabled_servers[server_name] then
 				return
 			end
 
-			setup(lsp_server)
-			enabled_servers[lsp_server] = true
+			setup(server_name)
+			enabled_servers[server_name] = true
 		end
 
-		local enable_server_scheduled = vim.schedule_wrap(enable_server)
-
-		for _, pkg_name in ipairs(mreg.get_installed_package_names()) do
-			enable_server(pkg_name)
+		for _, server_name in ipairs(available_servers) do
+			enable_server(server_name)
 		end
-
-		mreg:off("package:install:success", enable_server_scheduled)
-		mreg:on("package:install:success", enable_server_scheduled)
 	end
 
 	if opts.diagnostics then

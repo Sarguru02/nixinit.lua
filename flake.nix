@@ -11,7 +11,7 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, flake-parts, colorscripts, ... }:
+  outputs = inputs@{ nixpkgs, flake-parts, colorscripts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -20,34 +20,39 @@
         "x86_64-darwin"
       ];
 
-      perSystem = { config, system, ... }: 
+      perSystem = { system, ... }: 
         let
           pkgs = nixpkgs.legacyPackages.${system};
           runtimeDeps = with pkgs; [
-            hello
+            # Core utilities
             gcc
             fzf
             ripgrep
             curl
             git
-            prettierd
+            coreutils
+
+            # LSP servers
             lua-language-server
+            clang-tools
+            gopls
+            nodePackages.typescript-language-server
+            deno
             nixd
             python313Packages.python-lsp-server
             tinymist
             rust-analyzer
-
-            #colorscripts
-            coreutils
-            colorscripts.packages.${system}.default
-
-            # Conform
-            stylua
+            haskell-language-server
             markdown-oxide
-            yamllint
-            yamlfmt
 
-            # Lint
+            # Formatters
+            prettierd
+            stylua
+            yamlfmt
+            gofumpt
+
+            # Linters
+            yamllint
             tflint
             tfsec
             markdownlint-cli2
@@ -55,8 +60,11 @@
             nix
             lua54Packages.luacheck
 
-            #blink
+            # Build tools
             cargo
+
+            # Colorscripts
+            colorscripts.packages.${system}.default
           ];
 
           nvim = pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped (
