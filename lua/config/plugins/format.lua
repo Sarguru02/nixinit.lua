@@ -15,12 +15,12 @@ return {
 		notify_on_error = false,
 		formatters_by_ft = {
 			lua = { "stylua" },
-			python = { "black" },
-			javascript = { { "prettierd", "prettier" } },
-			html = { "prettier", "prettierd" },
+			javascript = { { "prettierd" } },
+			html = { "prettierd" },
 			css = { "prettierd" },
 			go = { "gofumpt" },
 			json = { "prettierd" },
+			yaml = { "yamlfmt" },
 		},
 	},
 }
