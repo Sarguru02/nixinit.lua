@@ -355,7 +355,7 @@ local config = function(_, opts)
 		return original_buf_attach_client(bufnr, client_id)
 	end
 
-	keymap.set("n", "<leader>lt", function()
+	keymap.set("n", "<leader>l", function()
 		toggle_lsp()
 	end, { desc = "Toggle LSP servers" })
 
