@@ -3,7 +3,7 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
-vim.keymap.set("n","<leader>pv", "<cmd>Ex<CR>")
+vim.keymap.set("n","<leader>pv", "<cmd>Oil<CR>")
 
 -- move lines
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
