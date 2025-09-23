@@ -43,6 +43,7 @@
             rust-analyzer
             markdown-oxide
             haskellPackages.haskell-language-server
+            vtsls
 
             # Formatters
             prettierd
