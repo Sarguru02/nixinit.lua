@@ -70,9 +70,21 @@
               customRC = ''
                 set runtimepath^=${./.}
                 lua << EOF
-                  local config_path = "${./.}/lua"
-                  package.path = config_path .. "/?.lua;" .. config_path .. "/?/init.lua;" .. package.path
-                  dofile("${./.}/init.lua")
+                  local fn = vim.fn
+
+                  local flake_config = "${./.}"
+                  local flake_init = flake_config .. "/init.lua"
+
+                  local nvim_appname = os.getenv("NVIM_APPNAME")
+                  local user_config = fn.stdpath("config")
+                  local user_init = user_config .. "/init.lua"
+
+                  if nvim_appname and fn.filereadable(user_config) then 
+                    dofile(user_init)
+                  else 
+                    package.path = flake_config .. "/lua/?.lua;" .. flake_config .. "/lua/?/init.lua"
+                    dofile(flake_init)
+                  end
                 EOF
               '';
             } // {
