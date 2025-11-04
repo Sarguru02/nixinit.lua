@@ -9,9 +9,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
     };
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
-  outputs = inputs@{ nixpkgs, flake-parts, colorscripts, ... }:
+  outputs = inputs@{ self, nixpkgs, flake-parts, colorscripts, neovim-nightly-overlay, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -23,6 +24,10 @@
       perSystem = { system, ... }: 
         let
           pkgs = nixpkgs.legacyPackages.${system};
+          pkgs-nightly = import nixpkgs{
+            inherit system;
+            overlays = [neovim-nightly-overlay.overlays.default];
+          };
           runtimeDeps = with pkgs; [
             # Core utilities
             gcc
@@ -65,7 +70,7 @@
             colorscripts.packages.${system}.default
           ];
 
-          nvim = pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped (
+          nvimConfig = 
             pkgs.neovimUtils.makeNeovimConfig {
               customRC = ''
                 set runtimepath^=${./.}
@@ -94,12 +99,24 @@
                 ":"
                 "${pkgs.lib.makeBinPath runtimeDeps}"
               ];
-            }
-          );
+            };
+          
+
+          nvim = pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped nvimConfig;
+          nightly = pkgs-nightly.wrapNeovimUnstable pkgs-nightly.neovim-unwrapped nvimConfig;
+          nightly-renamed = nightly.overrideAttrs (old: {
+            pname = "nvim-nightly";
+            __intentionallyOverridingVersion = true;
+            version = old.version or "unstable";
+            postFixup = ''
+              mv $out/bin/nvim $out/bin/nvim-nightly
+            '';
+          });
         in {
-          packages = {
-            default = nvim;
+          packages = rec {
+            default = neovim;
             neovim = nvim;
+            nvim-nightly = nightly-renamed; 
             
             package-sizes = pkgs.writeShellScriptBin "package-sizes" ''
               echo "=== Runtime Dependencies Size Analysis ==="
@@ -147,7 +164,10 @@
           };
 
           devShells.default = pkgs.mkShell {
-            packages = [ nvim ];
+            packages = with self.packages.${system};[
+              nvim
+              nvim-nightly
+            ];
           };
         };
     };

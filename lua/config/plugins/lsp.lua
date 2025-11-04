@@ -318,7 +318,6 @@ local config = function(_, opts)
 			"pylsp",
 			"nixd",
 			"hls",
-			"tinymist",
 			"markdown_oxide"
 		}
 
