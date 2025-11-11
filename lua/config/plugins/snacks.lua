@@ -98,7 +98,7 @@ local keys = {
 			Snacks.picker.files({
 				show_empty = true,
 				hidden = true,
-				ignored = true,
+				ignored = false,
 				follow = true,
 				supports_live = true,
 			})
@@ -152,7 +152,7 @@ local keys = {
 		function()
 			Snacks.picker.grep({
 				hidden = true,
-				ignored = true,
+				ignored = false,
 				follow = true,
 				regex = true,
 				live = true,
@@ -168,7 +168,7 @@ local keys = {
 		"<leader>sw",
 		mode = { "n" },
 		function()
-			Snacks.picker.grep_word()
+			Snacks.picker.grep_word({ignored=false})
 		end,
 		noremap = true,
 		silent = true,
@@ -275,6 +275,18 @@ local keys = {
 		silent = true,
 		desc = "toggle zen mode",
 	},
+  {
+    "<leader>tt",
+    mode = {"n"},
+    function()
+      Snacks.terminal(nil, {
+        win = { position = "float" }
+      })
+    end,
+    noremap = true,
+    silent = true,
+    desc = "toggle terminal"
+  }
 }
 
 local dashboard = {
@@ -433,7 +445,7 @@ local opts = {
 		sources = {
 			files = {
 				hidden = true,
-				ignored = true,
+				ignored = false,
 			},
 			explorer = {
 				layout = { layout = { position = "right" } },
