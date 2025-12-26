@@ -28,6 +28,7 @@
             inherit system;
             overlays = [neovim-nightly-overlay.overlays.default];
           };
+          # TODO: Remove all the language servers, and keep them in project's nix file
           runtimeDeps = with pkgs; [
             # Core utilities
             gcc
@@ -46,7 +47,6 @@
             nixd
             python313Packages.python-lsp-server
             rust-analyzer
-            markdown-oxide
             haskellPackages.haskell-language-server
             vtsls
 
@@ -117,50 +117,6 @@
             default = neovim;
             neovim = nvim;
             nvim-nightly = nightly-renamed; 
-            
-            package-sizes = pkgs.writeShellScriptBin "package-sizes" ''
-              echo "=== Runtime Dependencies Size Analysis ==="
-              echo ""
-              
-              total_bytes=0
-              
-              ${pkgs.lib.concatMapStringsSep "\n" (pkg: 
-                let
-                  pkgName = pkg.name or pkg.pname or "unknown";
-                  pkgPath = "${pkg}";
-                in ''
-                echo "Calculating size for ${pkgName}..."
-                size_output=$(${pkgs.nix}/bin/nix path-info --closure-size ${pkgPath} 2>/dev/null || echo "")
-                if [ -n "$size_output" ]; then
-                  size_bytes=$(echo "$size_output" | ${pkgs.gawk}/bin/awk '{print $NF}')
-                  size_mb=$(echo "scale=2; $size_bytes/1024/1024" | ${pkgs.bc}/bin/bc)
-                  size_gb=$(echo "scale=4; $size_bytes/1024/1024/1024" | ${pkgs.bc}/bin/bc)
-                  
-                  gb_check=$(echo "$size_gb >= 1" | ${pkgs.bc}/bin/bc)
-                  if [ "$gb_check" = "1" ]; then
-                    printf "%-40s %8s GB\n" "${pkgName}:" "$size_gb"
-                  else
-                    printf "%-40s %8s MB\n" "${pkgName}:" "$size_mb"
-                  fi
-                  
-                  total_bytes=$((total_bytes + size_bytes))
-                else
-                  printf "%-40s %8s\n" "${pkgName}:" "ERROR"
-                fi
-              '') runtimeDeps}
-              
-              echo ""
-              echo "=== TOTAL SIZE ==="
-              total_mb=$(echo "scale=2; $total_bytes/1024/1024" | ${pkgs.bc}/bin/bc)
-              total_gb=$(echo "scale=4; $total_bytes/1024/1024/1024" | ${pkgs.bc}/bin/bc)
-              
-              total_gb_check=$(echo "$total_gb >= 1" | ${pkgs.bc}/bin/bc)
-              if [ "$total_gb_check" = "1" ]; then
-                echo "Total closure size: $total_gb GB ($total_mb MB)"
-              else
-                echo "Total closure size: $total_mb MB"
-              fi
-            '';
           };
 
           devShells.default = pkgs.mkShell {

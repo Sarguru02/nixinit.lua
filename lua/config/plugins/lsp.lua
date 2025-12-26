@@ -310,7 +310,7 @@ local config = function(_, opts)
 		local enabled_servers = {}
 		local available_servers = {
 			"lua_ls",
-			"clangd", 
+			"clangd",
 			"gopls",
 			"rust_analyzer",
 			"vtsls",
@@ -318,7 +318,6 @@ local config = function(_, opts)
 			"pylsp",
 			"nixd",
 			"hls",
-			"markdown_oxide"
 		}
 
 		local enable_server = function(server_name)
