@@ -47,7 +47,6 @@
             nixd
             python313Packages.python-lsp-server
             rust-analyzer
-            haskellPackages.haskell-language-server
             vtsls
 
             # Formatters
@@ -58,7 +57,6 @@
 
             # Linters
             yamllint
-            markdownlint-cli2
             deadnix
             nix
             lua54Packages.luacheck

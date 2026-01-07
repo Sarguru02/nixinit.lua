@@ -8,8 +8,6 @@ return {
       lua = { "luacheck" },
       yaml = { "yamllint" },
       yml = { "yamllint" },
-      markdown = { "markdownlint-cli2" },
-      md = { "markdownlint-cli2" },
       nix = { "deadnix", "nix" },
     }
 
