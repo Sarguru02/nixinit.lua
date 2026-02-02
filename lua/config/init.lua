@@ -2,6 +2,7 @@ require("config.opts")
 require("config.lazy")
 require("config.maps")
 require("config.tabs")
+require("config.lsp")
 
 
 vim.api.nvim_create_autocmd("TextYankPost", {
