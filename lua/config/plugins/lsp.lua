@@ -294,7 +294,7 @@ local config = function(_, opts)
 	end
 
 	local setup = function(server)
-		local server_opts = vim.tbl_deep_extend("force", {
+		local server_opts = vim.tbl_extend("force", {
 			capabilities = capabilities,
 		}, (opts.servers and opts.servers[server]) or {})
 
