@@ -99,19 +99,20 @@ local opts = {
 			end,
 		},
 		nixd = {},
-		hls = {
-			filetypes = { "haskell", "lhaskell" },
-			root_dir = function(fname)
-				return require("lspconfig.util").root_pattern(
-					"*.cabal",
-					"stack.yaml",
-					"cabal.project",
-					"package.yaml",
-					"hie.yaml",
-					".git"
-				)(fname)
-			end,
-		},
+    hls = {
+      cmd = { "haskell-language-server-wrapper", "--lsp" },
+
+      root_dir = function(fname)
+        return require("lspconfig.util").root_pattern(
+          "*.cabal",
+          "stack.yaml",
+          "cabal.project",
+          "package.yaml",
+          "hie.yaml",
+          ".git"
+        )(fname)
+      end,
+    },
 	},
 }
 

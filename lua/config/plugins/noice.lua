@@ -6,10 +6,19 @@ local dependencies = {
 }
 
 -- plugin init function
-local init = function () end
+local init = function () 
+  require("noice").setup({
+    cmdline = {
+      view = "cmdline",
+    },
+  })
+end
 
 -- plugin opts
 local opts = {
+  cmdline = {
+    view = "cmdline",
+  },
     lsp = {
         override = {
             ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -22,7 +31,7 @@ local opts = {
     },
     presets = {
         bottom_search = true,
-        command_palette = true,
+        command_palette = false,
         long_message_to_split = false,
         inc_rename = false,
         lsp_doc_border = true,
@@ -41,9 +50,6 @@ return {
     event = {
         "VeryLazy",
     },
-    cmd = {},
-    ft = {},
-    build = {},
     dependencies = dependencies,
     init = init,
     opts = opts,

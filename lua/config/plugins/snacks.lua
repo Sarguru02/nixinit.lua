@@ -1,6 +1,3 @@
--- plugin dependencies
-local dependencies = {}
-
 -- plugin init function
 local init = function()
 	-- autocmd for the lazy event
@@ -116,23 +113,6 @@ local keys = {
 		noremap = true,
 		silent = true,
 		desc = "find the open buffers",
-	},
-	{
-		"<leader>sn",
-		mode = { "n" },
-		function()
-			Snacks.picker.files({
-				show_empty = true,
-				hidden = true,
-				ignored = true,
-				follow = true,
-				supports_live = true,
-				cwd = vim.fn.stdpath("config"),
-			})
-		end,
-		noremap = true,
-		silent = true,
-		desc = "find files in the nvim configuration directory",
 	},
 	{
 		"<leader>fr",

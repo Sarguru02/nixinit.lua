@@ -49,8 +49,3 @@ vim.opt.listchars = {
     extends = "»",
     precedes = "«",
 }
-
-
--- Folds
--- vim.opt.foldenable = true
--- vim.opt.foldmethod = "indent"
