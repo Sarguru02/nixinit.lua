@@ -1,3 +1,4 @@
+print("entered lsp file")
 local api = vim.api
 local lsp = vim.lsp
 local diagnostic = vim.diagnostic
@@ -43,9 +44,13 @@ end
 
 
 local servers = {
-  rust_analyzer = {},
+  rust_analyzer = {
+    root_markers = { "cargo.toml", "cargo.lock" }
+  },
 
-  nixd = {},
+  nixd = {
+    root_markers = {"flake.nix", "default.nix"}
+  },
 
   lua_ls = {
     settings = {
@@ -60,27 +65,29 @@ local servers = {
   },
 
   vtsls = {
-    root_dir = function(fname)
+    root_dir = function(bufnr, on_dir)
       -- avoid Deno projects
       if vim.fs.find({ "deno.json", "deno.jsonc" }, { path = fname, upward = true })[1] then
         return nil
       end
-      return vim.fs.dirname(vim.fs.find(".git", { path = fname, upward = true })[1] or fname)
+      local root_path = vim.fs.find("package.json", {path = vim.fn.getcwd(), upward = true, type="file"})[1]
+      if root_path then
+        on_dir(vim.fn.fnamemodify(root_path, ":h"))
+      end
     end,
   },
 
   hls = {
     cmd = { "haskell-language-server-wrapper", "--lsp" },
     filetypes = { "haskell", "lhaskell" },
-    root_dir = root_pattern(
-      "*.cabal",
+    root_markers = {
       "stack.yaml",
       "cabal.project",
       "package.yaml",
       "hie.yaml",
       "flake.nix",
       ".git"
-    ),
+    },
   },
 }
 
