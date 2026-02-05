@@ -1,57 +1,49 @@
--- plugin dependencies
 local dependencies = {
-    {
-        "MunifTanjim/nui.nvim",
-    },
+	{
+		"MunifTanjim/nui.nvim",
+	},
 }
 
--- plugin init function
-local init = function () 
-  require("noice").setup({
-    cmdline = {
-      view = "cmdline",
-    },
-  })
+local init = function()
+	require("noice").setup({
+		cmdline = {
+			view = "cmdline",
+		},
+	})
 end
 
--- plugin opts
 local opts = {
-  cmdline = {
-    view = "cmdline",
-  },
-    lsp = {
-        override = {
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true,
-        },
-        signature = {
-            enabled = false,
-        },
-    },
-    presets = {
-        bottom_search = true,
-        command_palette = false,
-        long_message_to_split = false,
-        inc_rename = false,
-        lsp_doc_border = true,
-    },
+	cmdline = {
+		view = "cmdline",
+	},
+	lsp = {
+		override = {
+			["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+			["vim.lsp.util.stylize_markdown"] = true,
+			["cmp.entry.get_documentation"] = true,
+		},
+		signature = {
+			enabled = false,
+		},
+	},
+	presets = {
+		bottom_search = true,
+		command_palette = false,
+		long_message_to_split = false,
+		inc_rename = false,
+		lsp_doc_border = true,
+	},
 }
 
--- plugin keys
-local keys = {}
-
--- plugin configurations
 return {
-    "folke/noice.nvim",
-    version = "*",
-    enabled = true,
-    lazy = true,
-    event = {
-        "VeryLazy",
-    },
-    dependencies = dependencies,
-    init = init,
-    opts = opts,
-    keys = keys,
+	"folke/noice.nvim",
+	version = "*",
+	enabled = true,
+	lazy = true,
+	event = {
+		"VeryLazy",
+	},
+	dependencies = dependencies,
+	init = init,
+	opts = opts,
 }

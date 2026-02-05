@@ -8,5 +8,5 @@ return {
 	---@type render.md.UserConfig
 	opts = opts,
 	lazy = true,
-  cmd = {"RenderMarkdown"}
+	cmd = { "RenderMarkdown" },
 }

@@ -4,16 +4,16 @@ return {
 		config = function()
 			require("mini.ai").setup({ n_lines = 500 })
 		end,
-    lazy=true,
-    event = { "VeryLazy"},
+		lazy = true,
+		event = { "VeryLazy" },
 	},
 	{
 		"echasnovski/mini.surround",
 		config = function()
 			require("mini.surround").setup()
 		end,
-    lazy=true,
-    event = { "VeryLazy"},
+		lazy = true,
+		event = { "VeryLazy" },
 	},
 	{
 		"echasnovski/mini.statusline",
@@ -25,15 +25,15 @@ return {
 				return "%2l:%-2v"
 			end
 		end,
-    lazy=true,
-    event = { "VeryLazy"},
+		lazy = true,
+		event = { "VeryLazy" },
 	},
 	{
 		"echasnovski/mini.pairs",
 		config = function()
 			require("mini.pairs").setup()
 		end,
-    lazy=true,
-    event = { "VeryLazy"},
-	}
+		lazy = true,
+		event = { "VeryLazy" },
+	},
 }

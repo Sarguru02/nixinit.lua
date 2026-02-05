@@ -2,9 +2,9 @@ local fn = vim.fn
 local opts = {
 	keymap = {
 		preset = "default",
-    ['<C-l>'] = {'select_next', 'fallback'},
-    ['Tab'] = nil,
-    ['<C-h>'] = {'select_prev', 'fallback'},
+		["<C-l>"] = { "select_next", "fallback" },
+		["Tab"] = nil,
+		["<C-h>"] = { "select_prev", "fallback" },
 	},
 
 	appearance = {
@@ -53,6 +53,6 @@ return {
 	---@module 'blink.cmp'
 	---@type blink.cmp.Config
 	opts = opts,
-  event = { "InsertEnter", "CmdlineEnter" },
+	event = { "InsertEnter", "CmdlineEnter" },
 	build = "cargo build --release",
 }

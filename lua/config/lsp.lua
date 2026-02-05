@@ -1,5 +1,3 @@
-print("entered lsp file")
-local api = vim.api
 local lsp = vim.lsp
 local diagnostic = vim.diagnostic
 local keymap = vim.keymap
@@ -106,8 +104,5 @@ for name, config in pairs(servers) do
 		)
 
 		lsp.enable(name)
-		print("enabling " .. name)
-	else
-		print("language server not executable")
-	end
+  end
 end
