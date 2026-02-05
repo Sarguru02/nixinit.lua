@@ -50,6 +50,10 @@ local servers = {
 			".git",
 		},
 
+    filetypes = {
+      "lua"
+    },
+
 		settings = {
 			Lua = {
 				diagnostics = {
