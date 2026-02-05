@@ -42,7 +42,7 @@ local opts = {
 			},
 		},
 	},
-	fuzzy = { implementation = "prefer_rust" },
+	fuzzy = { implementation = "prefer_rust_with_warning" },
 }
 
 return {
@@ -53,6 +53,6 @@ return {
 	---@module 'blink.cmp'
 	---@type blink.cmp.Config
 	opts = opts,
+  event = { "InsertEnter", "CmdlineEnter" },
 	build = "cargo build --release",
-	lazy = true,
 }

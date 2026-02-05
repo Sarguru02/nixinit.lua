@@ -28,7 +28,6 @@
             inherit system;
             overlays = [neovim-nightly-overlay.overlays.default];
           };
-          # TODO: Remove all the language servers, and keep them in project's nix file
           runtimeDeps = with pkgs; [
             # Core utilities
             gcc
@@ -37,29 +36,6 @@
             curl
             git
             coreutils
-
-            # LSP servers
-            lua-language-server
-            clang-tools
-            gopls
-            nodePackages.typescript-language-server
-            deno
-            nixd
-            python313Packages.python-lsp-server
-            rust-analyzer
-            vtsls
-
-            # Formatters
-            prettierd
-            stylua
-            yamlfmt
-            gofumpt
-
-            # Linters
-            yamllint
-            deadnix
-            nix
-            lua54Packages.luacheck
 
             # Build tools
             cargo
@@ -118,9 +94,13 @@
           };
 
           devShells.default = pkgs.mkShell {
-            packages = with self.packages.${system};[
+            packages = with self.packages.${system}; [
               nvim
               nvim-nightly
+              pkgs.lua-language-server
+              pkgs.lua54Packages.luacheck
+              pkgs.stylua
+              pkgs.deadnix
             ];
           };
         };
