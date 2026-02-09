@@ -2,16 +2,34 @@ local lsp = vim.lsp
 local diagnostic = vim.diagnostic
 local keymap = vim.keymap
 
-local function executable(cmd)
-	return vim.fn.executable(cmd) == 1
-end
-
 diagnostic.config({
 	underline = true,
 	virtual_text = true,
 	severity_sort = true,
 	float = { border = "rounded" },
 })
+
+local function toggle_lsp_for_buffer()
+	local bufnr = 0
+	local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+	if #clients > 0 then
+		-- LSP is active → stop & prevent reattach
+		vim.b.lsp_disabled = true
+		for _, client in ipairs(clients) do
+			client.stop()
+		end
+		Snacks.notify.info("LSP disabled for this buffer")
+	else
+		-- LSP inactive → allow reattach
+		vim.b.lsp_disabled = false
+
+		-- Trigger re-evaluation
+		vim.cmd("doautocmd FileType")
+
+		Snacks.notify.info("LSP enabled for this buffer")
+	end
+end
 
 local function on_attach(_, bufnr)
 	local opts = { buffer = bufnr }
@@ -28,14 +46,17 @@ local function on_attach(_, bufnr)
 	keymap.set("n", "<leader>rn", lsp.buf.rename, opts)
 	keymap.set("n", "<leader>ca", lsp.buf.code_action, opts)
 	keymap.set("n", "<leader>e", diagnostic.open_float, opts)
+	keymap.set("n", "<leader>l", toggle_lsp_for_buffer, opts)
 end
 
 local servers = {
 	rust_analyzer = {
+		cmd = { "rust-analyzer" },
 		root_markers = { "cargo.toml", "cargo.lock" },
 	},
 
 	nixd = {
+		cmd = { "nixd" },
 		root_markers = { "flake.nix", "default.nix" },
 	},
 
@@ -48,9 +69,9 @@ local servers = {
 			".git",
 		},
 
-    filetypes = {
-      "lua"
-    },
+		filetypes = {
+			"lua",
+		},
 
 		settings = {
 			Lua = {
@@ -65,14 +86,33 @@ local servers = {
 		},
 	},
 	vtsls = {
+		filetypes = {
+			"typescript",
+			"typescriptreact",
+			"javascript",
+			"javascriptreact",
+		},
+
+		cmd = { "vtsls", "--stdio" },
+
 		root_dir = function(bufnr, on_dir)
-			-- avoid Deno projects
-			if vim.fs.find({ "deno.json", "deno.jsonc" }, { path = fname, upward = true })[1] then
-				return nil
+			local fname = vim.api.nvim_buf_get_name(bufnr)
+			if fname == "" then
+				return
 			end
-			local root_path = vim.fs.find("package.json", { path = vim.fn.getcwd(), upward = true, type = "file" })[1]
-			if root_path then
-				on_dir(vim.fn.fnamemodify(root_path, ":h"))
+
+			-- do not enable in deno projects
+			local deno = vim.fs.find({ "deno.json", "deno.jsonc" }, { path = fname, upward = true })[1]
+
+			if deno then
+				return
+			end
+
+			-- enable for node projects
+			local pkg = vim.fs.find("package.json", { path = fname, upward = true })[1]
+
+			if pkg then
+				on_dir(vim.fs.dirname(pkg))
 			end
 		end,
 	},
@@ -92,17 +132,24 @@ local servers = {
 }
 
 for name, config in pairs(servers) do
-	local cmd = config.cmd
-	local bin = type(cmd) == "table" and cmd[1] or type(cmd) == "string" and cmd or name
+	lsp.config(
+		name,
+		vim.tbl_extend("force", {
+			on_attach = on_attach,
+		}, config)
+	)
+end
 
-	if executable(bin) then
-		lsp.config(
-			name,
-			vim.tbl_extend("force", {
-				on_attach = on_attach,
-			}, config)
-		)
-
-		lsp.enable(name)
-  end
+for name, config in pairs(servers) do
+	local fts = config.filetypes
+	if fts and #fts > 0 then
+		vim.api.nvim_create_autocmd("FileType", {
+			pattern = fts,
+			callback = function()
+				if not lsp.is_enabled(name) then
+					lsp.enable(name)
+				end
+			end,
+		})
+	end
 end
