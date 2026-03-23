@@ -21,6 +21,7 @@ return {
 			go = { "gofumpt" },
 			json = { "prettierd" },
 			yaml = { "yamlfmt" },
+			rust = { "rustfmt" },
 		},
 	},
 }

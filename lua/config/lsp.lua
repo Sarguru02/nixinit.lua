@@ -53,11 +53,13 @@ local servers = {
 	rust_analyzer = {
 		cmd = { "rust-analyzer" },
 		root_markers = { "cargo.toml", "cargo.lock" },
+		filetypes = { "rust" },
 	},
 
 	nixd = {
 		cmd = { "nixd" },
 		root_markers = { "flake.nix", "default.nix" },
+    filetypes = {"nix"},
 	},
 
 	lua_ls = {
@@ -129,6 +131,22 @@ local servers = {
 			".git",
 		},
 	},
+
+	gopls = {
+		cmd = { "gopls" },
+		filetypes = { "go", "gomod", "gowork", "gotmpl" },
+		root_markers = { "go.mod" },
+	},
+
+	pyright = {
+		cmd = { "pyright-langserver", "--stdio" },
+		filetypes = { "python" },
+		root_markers = {
+			"pyproject.toml",
+			"requirements.txt",
+			"setup.cfg",
+		},
+	},
 }
 
 for name, config in pairs(servers) do
@@ -140,16 +158,6 @@ for name, config in pairs(servers) do
 	)
 end
 
-for name, config in pairs(servers) do
-	local fts = config.filetypes
-	if fts and #fts > 0 then
-		vim.api.nvim_create_autocmd("FileType", {
-			pattern = fts,
-			callback = function()
-				if not lsp.is_enabled(name) then
-					lsp.enable(name)
-				end
-			end,
-		})
-	end
+for name, _ in pairs(servers) do
+	lsp.enable(name)
 end

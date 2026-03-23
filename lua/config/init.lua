@@ -14,10 +14,11 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "lua",
-  group = vim.api.nvim_create_augroup("Lua_disable_single_quote", { clear = true }),
+  pattern = { "lua", "rust" },
+  group = vim.api.nvim_create_augroup("disable_single_quote", { clear = true }),
   callback = function()
     MiniPairs.unmap("i", "'", "''")
   end,
   desc = "Disable single quote Lua",
 })
+
