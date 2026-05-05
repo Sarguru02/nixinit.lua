@@ -22,16 +22,6 @@ end
 local keys = {
 	-- git keymaps
 	{
-		"<leader>lg",
-		mode = { "n" },
-		function()
-			Snacks.lazygit.open()
-		end,
-		noremap = true,
-		silent = true,
-		desc = "open lazygit",
-	},
-	{
 		"<leader>b",
 		mode = { "n" },
 		function()
@@ -338,8 +328,7 @@ local opts = {
 	input = { enabled = true },
 	layout = { enabled = true },
 	lazygit = {
-		enabled = true,
-		configure = true,
+		enabled = false,
 	},
 	notifier = {
 		enabled = true,
