@@ -252,49 +252,6 @@ local keys = {
 		silent = true,
 		desc = "toggle zen mode",
 	},
-	{
-		"<leader>tt",
-		mode = { "n" },
-		function()
-			Snacks.terminal(nil, {
-				win = { position = "float" },
-			})
-		end,
-		noremap = true,
-		silent = true,
-		desc = "toggle terminal",
-	},
-}
-
-local dashboard = {
-	enabled = true,
-	width = 60,
-	row = nil,
-	col = nil,
-	preset = {
-		keys = {
-			{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
-			{ icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-			{ icon = "", key = "g", desc = "LazyGit", action = ":lua Snacks.lazygit.open()" },
-			{ icon = " ", key = "s", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
-			{ icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-			{ icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
-			{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
-		},
-	},
-	sections = {
-		{ section = "header", gap = 1, padding = 2 },
-		{ section = "keys", gap = 1, padding = 1 },
-		{
-			section = "terminal",
-			cmd = "pokemon-colorscripts -r --no-title; sleep .1",
-			random = 10,
-			pane = 2,
-			indent = 7,
-			height = 30,
-		},
-		{ section = "startup" },
-	},
 }
 
 local opts = {
@@ -308,7 +265,7 @@ local opts = {
 	bufdelete = {
 		enabled = true,
 	},
-	dashboard = dashboard,
+	dashboard = { enabled = false },
 	debug = { enabled = true },
 	dim = {
 		enabled = true,
@@ -413,10 +370,7 @@ local opts = {
 		refresh = 50,
 	},
 	notify = { enabled = true },
-	terminal = {
-		enabled = true,
-		float = true,
-	},
+	terminal = { enabled = false },
 	picker = {
 		enabled = true,
 		sources = {

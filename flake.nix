@@ -4,15 +4,10 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    colorscripts = {
-      url = "github:Sarguru02/pokemon-colorscripts-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-parts.follows = "flake-parts";
-    };
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
-  outputs = inputs@{ self, nixpkgs, flake-parts, colorscripts, neovim-nightly-overlay, ... }:
+  outputs = inputs@{ self, nixpkgs, flake-parts, neovim-nightly-overlay, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -39,9 +34,6 @@
 
             # Build tools
             cargo
-
-            # Colorscripts
-            colorscripts.packages.${system}.default
           ];
 
           nvimConfig = 
